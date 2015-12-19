@@ -4,20 +4,23 @@ layout: default
 ---
 
 <div class="row row-offcanvas row-offcanvas-right">
-   <div class="col-xs-12 col-sm-9">
+   <div class="col-xs-12 col-sm-9 ">
+<!--
       <p class="pull-right visible-xs">
          <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
       </p>
+-->
+
       <div class="jumbotron">
          <h1>About SIP</h1>
          <p>Welcome to aboutsip. This site is dedicated to all things related to SIP, both providing information about the protocol as well as libraries for building your very own SIP stack and libraries for reading &amp; writing pcaps. 
          </p>
          <p>In short, everything you would ever need for anything SIP. </p>
-      </div>
-      <div class="row">
+      </div> <!-- jumbotron -->
 
+      <div class="row">
          <!-- SIP Intro Section -->
-         <div class="col-6 col-sm-6 col-lg-4">
+         <div class="col-sm-6 col-md-6">
             <h2>SIP</h2>
             <p>This section is dedicated to providing information about the protocol. 
                Here you will find information ranging from the very basic use case of 
@@ -26,8 +29,21 @@ layout: default
             <p><a class="btn btn-default" href="/sip" role="button">View details &raquo;</a></p>
          </div><!--/span-->
 
+         <!-- SIP Lib Intro Section -->
+        <div class="col-sm-6 col-md-6">
+         <h2>sip lib</h2>
+         <p>A powerful SIP library for framing &amp; parsing SIP messages with a fluent API and immutable objects. SIP Lib is part of pkts.io and is designed to be used as a standalone module, either for building your own SIP stack from scratch, or developing your own tools for parsing &amp; manipulating SIP.
+         </p>
+         <p>SIP Lib is is used by sipstack.io for all its SIP parsing &amp; framing needs.
+         </p>
+         <p><a class="btn btn-default" href="/siplib" role="button">View details &raquo;</a></p>
+      </div><!--/span-->
+
+   </div><!--/row-->
+      <div class="row">
+
          <!-- Pkts.io Intro Section -->
-      <div class="col-6 col-sm-6 col-lg-4">
+      <div class="col-sm-6 col-md-6">
          <h2>pkts.io</h2>
          <p>A set of pure java libraries for manipulating pcaps. A must-have tool for developers and system integrators alike, which provides an easy-to-use intutive API for reading &amp; writing pcaps. It's primary purpose is to allow anyone to write the tools you need to analyze pcaps.
          </p>
@@ -35,12 +51,14 @@ layout: default
       </div><!--/span-->
 
          <!--  Netty Integration Intro Section -->
-      <div class="col-6 col-sm-6 col-lg-4">
+      <div class="col-sm-6 col-md-6">
          <h2>sipstack.io</h2>
          <p>If you are looking to build your own SIP stack you will need a fast &amp; reliable network stack and a solid framing &amp; parsing library to start off with. sipstack.io is project based on netty.io and pkts.io, where Netty is providing the reliable network stack and the framing &amp; and parsing of SIP messages is provided by pkts.io. 
          </p>
          <p><a class="btn btn-default" href="http://www.sipstack.io" role="button">View details &raquo;</a></p>
       </div><!--/span-->
+
    </div><!--/row-->
+
 </div><!--/span-->
 
