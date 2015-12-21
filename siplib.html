@@ -1,0 +1,183 @@
+---
+title: SIP Lib
+layout: default
+menu: siplib.html
+active_element: siplib
+pktsio_version: 2.0.0
+---
+
+<div class="row row-offcanvas row-offcanvas-right">
+   <div>
+      <p class="pull-right visible-xs">
+         <button type="button" class="btn btn-primary btn-xs" data-toggle="offcanvas">Toggle nav</button>
+      </p>
+
+      <div class="row col-md-9"> 
+
+         <!-- Pkts.io Intro Section --> 
+         <!-- <div id="intro" class="col-9 col-sm-9 col-lg-9"> --> 
+         <div class="col-xs-12">
+            <div id="intro">
+            <h1>SIP Lib</h1>
+            <p>SIP Lib is part of pkts.io and is a complete SIP library for framing, parsing and representing SIP messages, headers and addresses.  All objects are immutable, has a modern &amp; fluent API and makes use of the latest Java 8 language features, allowing the developer to be focused on what needs to get done as opposed to how. 
+            </p>
+            <p>The motivation for writing SIP Lib is that the existing SIP libraries out there are quite old, does not make use of modern design principals and language features and moreover, they are typical mutable and rely on side effects, which makes it very hard to reason about what will actually happen once you deploy your code into a multi threaded environment.
+            </p>
+            <p>Finally, another explicit goal of SIP Lib was to make it a standalone module so that it can easily be consumed by a variety of applications, whether it be a “real” SIP stack or a simple one-off tool that you may need build in order to make your life easier.
+            </p>
+            </div>
+
+            <div id="intro-parse-sip-message">
+            <h3>Parse a SIP Message</h3>
+            <p>This is the most basic example showing how you can parse a SIP
+               message based off of a String. In this example, we are the ones
+               creating that raw message ourselves but typically you would read
+               this off of the network, or perhaps from a file if you are building
+               a tool of some sort.
+            </p>
+
+{% highlight java %}
+    // (1)
+    final String rawMessage = new StringBuilder("BYE sip:bob@127.0.0.1:5060 SIP/2.0\r\n")
+            .append("Via: SIP/2.0/UDP 127.0.1.1:5061;branch=z9hG4bK-28976-1-7\r\n")
+            .append("From: alice <sip:alice@127.0.1.1:5061>;tag=28976SIPpTag001\r\n")
+            .append("To: bob <sip:bob@127.0.0.1:5060>;tag=28972SIPpTag011\r\n")
+            .append("Call-ID: 1-28976@127.0.1.1\r\n")
+            .append("CSeq: 2 BYE\r\n")
+            .append("Contact: sip:alice@127.0.1.1:5061\r\n")
+            .append("Max-Forwards: 70\r\n")
+            .append("Subject: Example BYE Message\r\n")
+            .append("Content-Length: 0\r\n")
+            .append("\r\n").toString();
+
+    final SipMessage msg = SipMessage.frame(rawMessage); // (2)
+
+    final FromHeader from = msg.getFromHeader(); // (3)
+
+    final ContactHeader contact = msg.getContactHeader(); // (4)
+
+    // (5)
+    if (msg.isBye()) {
+        System.out.println("Yay, this was a BYE message");
+    }
+
+    if (msg.isRequest()) {
+        System.out.println("Yay, this was SIP request");
+    }
+{% endhighlight %}
+            <p>
+                <ol>
+                    <li>Just create a String with a properly formatted SIP message. As previously pointed out, normally you wouldn't
+                        create a SIP message manually like this but rather read a stream of bytes off of the network, or perhaps from a text
+                        file in case you are building some kind of tool. However, this is just an example so we are doing it the
+                        hard way...
+                    </li>
+                    <li>Every object in SIP Lib has a frame-method, which
+                        will attempt to frame the raw content into that object.
+                        This is true for SIP messages, SIP headers, SIP URIs
+                        etc etc. All frame-methods are overloaded and accept
+                        Strings, Buffers and byte-arrays.
+                    </li>
+                    <li>Once the message has successfully been parsed you can access headers etc within the SIP message.
+                    </li>
+                    <li>All headers that are typically needed for any application, and
+                        in particular for SIP stacks, have explicit methods and returns
+                        explicit objects. You may still use the generic getHeader but then
+                        you will get a generic SIP header back.
+                    </li>
+                    <li>Instead of having to do SipMessage.getMethod().equals("BYE") etc
+                        the SipMessage class has many convenience methods for making the code
+                        more readable, less error prone and less boiler plate to write.
+                    </li>
+                </ol>
+            </p>
+
+         </div>
+     <div id="intro-create-sip-request">
+         <h3>Create a SIP Request</h3>
+         <p>All objects within SIP Lib are immutable. Hence, once an object, such as a
+            SipMessage, a SipHeader or a e.g. a SipURI has been
+            constructed you cannot change it. Therefore, all objects within SIP Lib make
+            use of the builder pattern, allowing the user to construct the desired object.
+         </p>
+{% highlight java linenos %}
+ final SipRequest invite = SipRequest.invite("sip:alice@aboutsip.com")
+         .withFromHeader("sip:bob@pkts.io")
+         .build();
+{% endhighlight %}
+         <p>The SipRequest object contains convenience methods for creating a particular SIP request, 
+            such as an INVITE. The object returned from this method is a SipMessage.Builder-object, 
+            which allows you to continue constructing the object before finally building it. 
+            Once built, you cannot change it.
+         </p>
+         </div>
+
+     <div id="intro-create-sip-response">
+         <h3>Create a SIP Response</h3>
+         <p>Creating responses is typically done based off a request and SIP Lib
+            allows you to do so but of course, the object returned will be a builder.
+         </p>
+
+{% highlight java linenos %}
+  final SipRequest invite = SipRequest.invite("sip:alice@aboutsip.com")
+          .withFromHeader("sip:bob@pkts.io")
+          .build();
+
+  final SipResponse response = invite.createResponse(200)
+          .withHeader(SipHeader.create("X-Hello", "World"))
+          .build();
+{% endhighlight %}
+
+         <p>The SipRequest object has a convenience method for creating a response based off of it and will return
+            a new SIP response builder object. In this example, for good measure, we also added a generic header
+            to the response before we built it.
+         </p>
+         </div>
+
+         </div><!--/span-->
+
+         <div class="col-xs-12" id="intro-consume-it">
+            <h3>Consume It</h3>
+            <p>SIP Lib is part of pkts.io, which is available through Maven Central so just include the following Maven 
+               artifact and you are good to go:
+            </p>
+            {% highlight xml %}
+<dependency>
+      <groupId>io.pkts</groupId>
+      <artifactId>pkts-sip</artifactId>
+      <version>{{ page.pktsio_version }}</version>
+      <type>jar</type>
+  </dependency>
+            {% endhighlight %}
+         </div><!--/span-->
+
+         <div class="col-xs-12" id="intro-javadoc">
+            <h3>Javadoc</h3>
+            <p>Javadocs for all releases are hosted by our friends at <a href="www.javadoc.io">javadoc.io</a> and the current release of SIP Lib (and pkts.io) is accessed through the following links:
+               <ul>
+                    <li><a href="http://www.javadoc.io/doc/io.pkts/pkts-sip/{{page.pktsio_version}}"><code>SIP</code></a></li>
+               </ul>
+            </p>
+         </div><!--/span-->
+
+         <div class="col-xs-12" id="examples">
+            <h1>Examples</h1>
+            <p>The pkts-examples contains many different examples of how to use pkts.io in general and of course how to use SIP Lib. Please see the pkts.io example repository on <a href="https://github.com/aboutsip/pkts/tree/master/pkts-examples/src/main/java/io/pkts/examples/siplib">github.com/aboutsip/pkts</a> for the examples.
+            </p>
+         </div><!--/span-->
+
+         <div class="col-xs-12" id="contributing">
+            <h1>Contributing</h1>
+            <p> Contributions are more than welcome and highly encouraged. Since SIP Lib is part of pkts.io, please see the general guidelines found for pkts.io <a href="/pktsio/#contributing">here</a>.
+            </p>
+         </div><!--/span-->
+
+         <div class="col-xs-12" id="license">
+            <h1>License</h1>
+            <p>pkts.io and all projects under aboutsip.com are released under the terms of the <a href="http://en.wikipedia.org/wiki/MIT_License">MIT license</a>
+            </p>
+         </div><!--/span-->
+
+   </div><!--/row-->
+</div><!--/span-->
+
