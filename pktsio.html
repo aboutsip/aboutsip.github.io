@@ -31,7 +31,7 @@ pktsio_version: 3.0.2
                standard out.
             </p>
 
-{% highlight java linenos %}
+{% highlight java %}
 final Pcap pcap = Pcap.openStream("my_traffic.pcap");
 
 pcap.loop(new PacketHandler() {
@@ -55,7 +55,7 @@ Pkts.io also contains a higher level of abstraction – streams. Quite often you
          </p>
 
          <p>Example, load a pcap from file and consume all SIP Streams. </p>
-{% highlight java linenos %}
+{% highlight java %}
 final Pcap pcap = Pcap.openStream("my_traffic.pcap");
 
 final StreamHandler streamHandler = new DefaultStreamHandler();

@@ -100,7 +100,7 @@ pktsio_version: 3.0.2
             constructed you cannot change it. Therefore, all objects within SIP Lib make
             use of the builder pattern, allowing the user to construct the desired object.
          </p>
-{% highlight java linenos %}
+{% highlight java %}
  final SipRequest invite = SipRequest.invite("sip:alice@aboutsip.com")
          .withFromHeader("sip:bob@pkts.io")
          .build();
@@ -118,7 +118,7 @@ pktsio_version: 3.0.2
             allows you to do so but of course, the object returned will be a builder.
          </p>
 
-{% highlight java linenos %}
+{% highlight java %}
   final SipRequest invite = SipRequest.invite("sip:alice@aboutsip.com")
           .withFromHeader("sip:bob@pkts.io")
           .build();
